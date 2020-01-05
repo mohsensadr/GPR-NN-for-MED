@@ -124,6 +124,8 @@ elif method =="SVGP":
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams['text.usetex'] = True
 import numpy as np
 from scipy import integrate
 

@@ -15,14 +15,16 @@ import time
 #from scipy.optimize import minimize
 
 NN = [100,200 , 300, 400, 500, 600, 700, 800, 900, 1000]
-dimy = [4]
+#NN = [100]
+dimy = [8]
 repeats = 1;
-
+pmin = np.array([0,1,-1,0,-4, 1,-25,1]);
+pmax = np.array([0,1, 1,3, 4,15, 1,110])
 for j in range(len(dimy)):
     dimY = dimy[j]
     dimX = dimY - 2;
 
-    fp = open("data_geb_perf_dimY_" + str(dimY)+".txt", "a")
+    fp = open("new_data_geb_perf_dimY_" + str(dimY)+".txt", "a")
     st = ""
 
     #if dimY == 4:
@@ -36,7 +38,14 @@ for j in range(len(dimy)):
     dt = [];
     [dt.append([]) for _ in range(len(NN))];
     for ii in range(NN[-1]):
-        La, Mo, La0 = sample_new(dimY)
+        done = 1
+        while(done==1):
+            La, Mo, La0 = sample_new(dimY,10)
+            if np.all(pmin[2:dimY]<Mo[0][2:dimY]) and np.all( Mo[0][2:dimY]<pmax[2:dimY]):
+                done =0
+            else:
+                print("    REJECT!    ")
+
         if ii == NN[k]-1:
             end_time = time.time()
             dt[k] = end_time-start_time

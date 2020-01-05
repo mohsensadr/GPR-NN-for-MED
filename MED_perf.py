@@ -35,9 +35,9 @@ def transf_back(xx,m,v,n):
             xx[i,:] = xx[i,:]* v[i] ** 0.5 + m[i]
     return xx
 
-NN = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-dimy = [6]
-repeats = 10;
+NN = [125, 250, 500, 1000, 2000]
+dimy = [8]
+repeats = 5;
 for j in range(len(dimy)):
     dimY = dimy[j]
     dimX = dimY - 2;
@@ -46,7 +46,7 @@ for j in range(len(dimy)):
     i11 = 20;
     i2 = i11 + dimY;
 
-    fp = open("MED_perf_dimY_" + str(dimY)+".txt", "w")
+    fp = open("MED_perf_dimY_" + str(dimY)+".txt", "a")
     st = ""
     '''
             ----    Reading Data      ----
@@ -100,7 +100,7 @@ for j in range(len(dimy)):
             end_time = time.time()
             dt[repeat] = end_time-start_time
 
-        print("dimY="+str(dimY)+", N1="+str(N1)+",  dt="+str(np.mean(dt)))
-        st += str(dimY) + "  " + str(N1) + "  "+str(np.mean(dt))+"\n"
+        print("dimY="+str(dimY)+", N1="+str(N1)+",  dt="+str(np.median(dt)))
+        st += str(dimY) + "  " + str(N1) + "  "+str(np.median(dt))+"\n"
     fp.write(st);
     fp.close()

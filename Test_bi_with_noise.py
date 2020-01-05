@@ -32,28 +32,7 @@ def Mom(l, dimY, dimX):
 
 
 
-mu = [0.8, 0.9, 0.95]
-sig = [0.3, 0.2, 0.15]
-var_noise = 2e-1;
 
-case = 2;
-mu1 = mu[case]  # + ((mu_end-mu_beg)/(n-1))*j
-mu2 = -mu1;
-sig1 = sig[case];
-sig2 = np.sqrt(2.0 - (sig1 ** 2 + 2 * mu1 ** 2))
-
-xx = np.arange(-10.0, 10.0, 0.001)
-ff = f(xx,mu1,sig1,mu2,sig2);
-## add noise
-ffe = ff*(1.0 + np.random.normal(0.0,var_noise,len(xx)));
-
-dimY = 8;
-pe = np.zeros(dimY); p = np.zeros(dimY);
-for i in range(dimY):
-    p[i] = integrate.trapz(xx ** (i + 1) * ff, xx);
-    pe[i] = integrate.trapz(xx ** (i + 1) * ffe, xx);
-print(p)
-print(pe)
 
 ### read GPR models
 import gpflow as gp
@@ -85,7 +64,9 @@ def kl(p, q):
     return np.sum(np.where(q > 1e-10, p * np.log(p / q), 0))*20.0/len(p);
 
 import matplotlib.pyplot as plt
-size = 5;
+import matplotlib as mpl
+mpl.rcParams['text.usetex'] = True
+size = 6;
 lw = 1
 cm = 0.393701; #inches
 plt.rcParams.update({'font.size': 9,'font.family': 'serif'})
@@ -100,8 +81,7 @@ data_address = ["data/4l.txt", "data/6l.txt", "data/8l.txt"]
 model_names = ["models/4l_1000.txt", "models/6l_1000.txt", "models/8l_1000.txt"]
 
 
-plt.plot(xx, ffe, label=r"$f^{\mathrm{bi}}_\epsilon$",
-             linestyle="-", color="grey", linewidth=0.1)
+
 #plt.plot(xx, ff, label=r"$f^{\mathrm{bi}}$",
 #             linestyle="-", color="black", linewidth=1)
 
@@ -111,57 +91,93 @@ for j in range(len(model_names)):
     m_name = model_names[j]
     models.append(gp.saver.Saver().load(m_name))
 
+mu = [0.8, 0.9, 0.95]
+sig = [0.3, 0.2, 0.15]
+var_noise = 1e-1;
+
+case = 2;
+mu1 = mu[case]  # + ((mu_end-mu_beg)/(n-1))*j
+mu2 = -mu1;
+sig1 = sig[case];
+sig2 = np.sqrt(2.0 - (sig1 ** 2 + 2 * mu1 ** 2))
+
+xx = np.arange(-10.0, 10.0, 0.001)
+ff = f(xx,mu1,sig1,mu2,sig2);
+## add noise
+rrs = 1;
+lla = ["(a)","(b)","(c)"]
 La = []; [La.append([]) for _ in range(len(model_names))];
-DKL_val = []; [DKL_val.append([]) for _ in range(len(model_names))]
-for j in range(len(model_names)):
-    address = data_address[j]
-    x0 = np.loadtxt(address, skiprows=1, unpack=True);
-    dim = len(x0[:, 0]);  ## 26 here
+DKL_val = np.zeros(len(model_names));# [DKL_val.append([]) for _ in range(len(model_names))]
+varrr = np.zeros(len(model_names));# [varrr.append([]) for _ in range(len(model_names))]
+pp = np.zeros(len(model_names))#[]; [pp.append([]) for _ in range(len(model_names))]
 
-    vvar = []
-    mm = []
-    for i in range(dim):
-        mm.append(np.mean(x0[i, :]));
-        vvar.append(np.var(x0[i, :]));
-    model = models[j]#gp.saver.Saver().load(m_name)
+for rr in range(rrs):
+    ffe = ff*(1.0 + np.random.normal(0.0,var_noise,len(xx)));
 
-    N1 = len(model.X.value)
-    dimX = len(model.X.value[0])
-    dimY = len(model.Y.value[0]);
+    plt.plot(xx, ffe, label=r"$f^{\mathrm{bi}}_\epsilon$",
+                 linestyle="-", color="grey", linewidth=0.1)
+    dimY = 8;
+    pe = np.zeros(dimY); p = np.zeros(dimY);
+    for i in range(dimY):
+        p[i] = integrate.trapz(xx ** (i + 1) * ff, xx);
+        pe[i] = integrate.trapz(xx ** (i + 1) * ffe, xx);
 
-    mmX = mm[0:dimX + 2]
-    varX = vvar[0:dimX + 2]
-    mmY = mm[20:]
-    varY = vvar[20:]
 
-    q = [pe];
-    q = np.array(q)
-    # scale input
-    q_sc = transf_to(q, mmX, varX, 2, dimX + 2);
-    # predict
-    ystar2, varstar2 = model.predict_y(q_sc[:, 2:dimX + 2])
-    print("mu1=" + str(mu1) + " var = " + str(varstar2[0, 0]))
-    # transfer back
-    q_tf = transf_back(q_sc, mmX, varX, 2, dimX + 2);
-    la_tf = transf_back(ystar2, mmY, varY, 0, dimY);
-    la_tf = la_tf[0]
-    La[j].append(la_tf);
-    I, d = integrate.quad(Z, -1e1, 1e1, args=(La[j][0],dimY));
 
-    fl = Z(xx, la_tf, dimY) / I;
-    plt.plot(xx, fl, label=r"$f^{\lambda}_"+str(dimY)+"$", marker=markers[j], markevery=400+j*10,
+    for j in range(len(model_names)):
+        address = data_address[j]
+        x0 = np.loadtxt(address, skiprows=1, unpack=True);
+        dim = len(x0[:, 0]);  ## 26 here
+
+        vvar = []
+        mm = []
+        for i in range(dim):
+            mm.append(np.mean(x0[i, :]));
+            vvar.append(np.var(x0[i, :]));
+        model = models[j]#gp.saver.Saver().load(m_name)
+
+        N1 = len(model.X.value)
+        dimX = len(model.X.value[0])
+        dimY = len(model.Y.value[0]);
+
+        mmX = mm[0:dimX + 2]
+        varX = vvar[0:dimX + 2]
+        mmY = mm[20:]
+        varY = vvar[20:]
+
+        q = [pe];
+        q = np.array(q)
+        # scale input
+        q_sc = transf_to(q, mmX, varX, 2, dimX + 2);
+        # predict
+        ystar2, varstar2 = model.predict_y(q_sc[:, 2:dimX + 2])
+        print("mu1=" + str(mu1) + " var = " + str(varstar2[0, 0]))
+        # transfer back
+        q_tf = transf_back(q_sc, mmX, varX, 2, dimX + 2);
+        la_tf = transf_back(ystar2, mmY, varY, 0, dimY);
+        la_tf = la_tf[0]
+        La[j].append(la_tf);
+        I, d = integrate.quad(Z, -1e1, 1e1, args=(La[j][0],dimY));
+
+        fl = Z(xx, la_tf, dimY) / I;
+        plt.plot(xx, fl, label=r"$f^{\lambda}_"+str(dimY)+"$", marker=markers[j], markevery=400+j*10,
              markersize=3, color=colors[j + 1], linewidth=lw)
 
-    DKL_val[j] = kl(ffe, fl);
+        p = Mom(la_tf, dimY, dimY);
+        DKL_val[j] += kl(ffe, fl);
+        varrr[j] += varstar2[0, 0]
+        pp[j] += np.linalg.norm(p-pe[0:dimY])/np.linalg.norm(pe[0:dimY])
 
+plt.text(0.1, 0.9, lla[case], horizontalalignment='center', verticalalignment='center', transform=ax.transAxes)
 
+'''
 fp = open("kl_mu1_"+str(mu1), "w")
 st = ""
 for j in range(2,5):
-    st+=str(j*2)+"  "+str(DKL_val[j-2])+"\n"
+    st+=str(j*2)+"  "+str(DKL_val[j-2]/rrs)+"   "+str(varrr[j-2]/rrs)+"   "+str(pp[j-2]/rrs)+"\n"
 fp.write(st);
 fp.close()
-
+'''
 plt.legend(frameon=False, bbox_to_anchor=(1.02, 1.02),  ncol=1)
 
 '''
@@ -178,6 +194,6 @@ plt.xlim(-3.0, 3.0)
 ax.set_ylabel(r"$f(x)$")
 ax.set_xlabel(r"$x$")
 fig.set_size_inches(size * cm, size * cm)
-plt.savefig("TestCase1_with_noise/mu1_"+str(mu1)+".pdf", format='pdf', bbox_inches="tight", dpi=300);
+plt.savefig("TestCase1_with_noise/"+lla[case]+".pdf", format='pdf', bbox_inches="tight", dpi=300);
 ax.legend();
 plt.show()

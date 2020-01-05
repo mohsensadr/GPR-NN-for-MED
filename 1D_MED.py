@@ -19,7 +19,7 @@ with_mean = "no"
 method = "GPR"
 #method = "multi_output"
 
-dimY = 8; dimX =dimY-2;
+dimY = 4; dimX =dimY-2;
 i0 = 2; i1=i0+dimX; i11=20; i2=i11+dimY;
 
 '''
@@ -181,7 +181,7 @@ elif method == "multi_output":
 save the model 
 '''
 import pickle
-m_name = "models/"+str(dimY)+"l_"+str(N1)+".txt"
+m_name = "models/"+str(dimY)+"ln_"+str(N1)+".txt"
 
 #with open(m_name, 'wb') as fp:
 #    pickle.dump(model.read_trainables(), fp)

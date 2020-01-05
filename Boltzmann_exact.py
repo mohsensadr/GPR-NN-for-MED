@@ -7,6 +7,8 @@ import numpy as np
 from scipy import integrate
 import math
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams['text.usetex'] = True
 size = 5;
 lw = 1
 cm = 0.393701; #inches
@@ -51,13 +53,13 @@ def f(v,tau):
 def Hf(v,tau,i):
     return f(v,tau)*v**i;
 def Mn(n,tau):
-    m = np.zeros(n);
-    p  = np.zeros(n);
-    phi1 = 1.0;
+    m = np.zeros(n)
+    p = np.zeros(2*n)
+    phi1 = 1.0
     alpha = 1.0 - np.exp(-phi1 * tau / 6.0)
     for nn in range(n):
         m[nn] = alpha**(nn-1)*(nn-(nn-1.0)*alpha)
-        p[nn] = math.factorial(2*nn+1)/(2**nn*math.factorial(nn))*m[nn]
+        p[2*nn+1] = math.factorial(2*nn+1)/(2**nn*math.factorial(nn))*m[nn]
     return p
 def Mn_num(n,tau):
     m = np.zeros(n);
@@ -112,7 +114,7 @@ def kl(p, q):
     return np.sum(np.where(q > 1e-10, p * np.log(p / q), 0))*20.0/len(p);
 
 data_address = ["data/4l.txt", "data/6l.txt", "data/8l.txt"]
-model_names = ["models/4l_1000.txt", "models/6l_1000.txt", "models/8l_1000.txt"]
+model_names = ["models/4l_1000.txt", "models/6ln_1000.txt", "models/8ln_1000.txt"]
 models = []
 for j in range(len(model_names)):
     m_name = model_names[j]
@@ -134,7 +136,7 @@ for k in range(len(tt)):
     I, d = integrate.quad(f, -1e1, 1e1, args=(t));
     I = integrate.trapz(f0,xx)
     f0 = np.array(f0) / I;
-    plt.plot(xx, f0, label=r"$f^{\mathrm{ex.}}_{t_"+str(k)+"}$",
+    plt.plot(xx, f0, label=r"$\hat{f}^{\mathrm{Bolt}}$",
          linestyle="-", color="black", linewidth=1.0)
 
     DKL_val = []; [DKL_val.append([]) for _ in range(len(tt))]
@@ -169,6 +171,9 @@ for k in range(len(tt)):
         for i in range(len(m_num)):
             m_num[i] = m_num[i] / (st ** (i + 1.0))
         ################################
+        mn = Mn(int(dimY/2),t)
+        for i in range(0,len(mn)):
+            mn[i] = mn[i] / (st ** ((i - 1.0)))
         print(m_num)
         q = [m_num];
         q = np.array(q)
@@ -190,6 +195,7 @@ for k in range(len(tt)):
 
         q_pred = Mom(la_tf, dimY, dimY)
         DKL = kl(f0,fl)
+        '''
         fp = open("Boltz_dimY_" + str(4 + 2 * (model_num)), "a")
         stt = str(t) + "  " + str(DKL) + "   "
         for kk in range(len(q_pred)):
@@ -197,7 +203,7 @@ for k in range(len(tt)):
         stt+="\n"
         fp.write(stt);
         fp.close()
-
+        '''
         ## map standard to original moments
         #for i in range(len(m_num)):
         #    m_num[i] = m_num[i]*(st**(i+1.0))
@@ -211,12 +217,12 @@ for k in range(len(tt)):
     for kk in range(len(m_num)):
         stt += str(m_num[kk]) + "  "
     stt += "\n"
-    gp.write(stt);
+    #gp.write(stt);
 
     plt.legend(frameon=False, bbox_to_anchor=(1.02, 1.02),  ncol=1)
-    plt.xlim(-3.0, 3.0)
-    ax.set_ylabel(r"$f(x)$")
-    ax.set_xlabel(r"$x$")
+    plt.xlim(-2.5, 2.5)
+    ax.set_ylabel(r"$f(v|\hat{t}=\hat{t}_"+str(k)+")$")
+    ax.set_xlabel(r"$v$")
     fig.set_size_inches(size * cm, size * cm)
     plt.savefig("TestCase_Boltz/t_"+str(k)+".pdf", format='pdf', bbox_inches="tight", dpi=300);
     ax.legend();

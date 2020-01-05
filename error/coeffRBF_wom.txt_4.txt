@@ -1,0 +1,38 @@
+#### N=1000:  
+{'GPR/kern/kernels/0/lengthscales': array([2.10824816e+00, 2.33970475e+00, 2.35507550e+00, 5.11014706e+05]), 'GPR/kern/kernels/1/variance': array(68113.70569495), 'GPR/kern/kernels/0/variance': array(1100805.81081403)}
+#### N=1000:  
+{'GPR/kern/variance': array(1592355.65847916), 'GPR/kern/lengthscales': array([2.19816063e+00, 2.43772748e+00, 2.46003652e+00, 6.77150002e+05])}
+#### N=100:  
+{'GPR/kern/lengthscales': array([  1.62227869,   1.00482305,   1.34214608, 134.02782281]), 'GPR/kern/variance': array(248.4362409)}
+#### N=200:  
+{'GPR/kern/variance': array(5981.81155808), 'GPR/kern/lengthscales': array([1.51392497e+00, 1.72766494e+00, 1.92835779e+00, 4.82859048e+03])}
+#### N=300:  
+{'GPR/kern/lengthscales': array([1.83056842e+00, 2.13604064e+00, 2.17342089e+00, 2.66798132e+04]), 'GPR/kern/variance': array(48083.75114031)}
+#### N=400:  
+{'GPR/kern/lengthscales': array([1.96594518e+00, 2.36279790e+00, 2.62829732e+00, 7.22981526e+04]), 'GPR/kern/variance': array(153810.34071631)}
+#### N=500:  
+{'GPR/kern/variance': array(201836.73457727), 'GPR/kern/lengthscales': array([1.99937470e+00, 2.30781713e+00, 2.66858370e+00, 8.40447331e+04])}
+#### N=1000:  
+{'GPR/kern/variance': array(1592355.65847916), 'GPR/kern/lengthscales': array([2.19816063e+00, 2.43772748e+00, 2.46003652e+00, 6.77150002e+05])}
+#### N=2000:  
+{'GPR/kern/kernels/0/variance': array(532023.61720775), 'GPR/kern/kernels/0/lengthscales': array([1.81574900e+00, 2.01286882e+00, 1.90887296e+00, 1.87957278e+05]), 'GPR/kern/kernels/1/variance': array(28547.18459268)}
+#### N=3000:  
+{'GPR/kern/kernels/1/variance': array(46157.28647377), 'GPR/kern/kernels/0/lengthscales': array([1.74143879e+00, 2.00091023e+00, 1.90103255e+00, 3.00375460e+05]), 'GPR/kern/kernels/0/variance': array(917548.2245797)}
+#### N=1000:  
+{'GPR/kern/kernels/0/variance': array(1721049.18301977), 'GPR/kern/kernels/0/lengthscales': array([2.19996406e+00, 2.43128453e+00, 2.45092663e+00, 8.10339504e+05]), 'GPR/kern/kernels/1/variance': array(1.e-06)}
+#### N=2000:  
+{'GPR/kern/kernels/1/variance': array(1.e-06), 'GPR/kern/kernels/0/variance': array(183280.6789101), 'GPR/kern/kernels/0/lengthscales': array([ 1.72607224,  1.81808097,  1.72150872, 89.04559546])}
+#### N=3000:  
+{'GPR/kern/kernels/0/lengthscales': array([ 2.13406516,  2.29156807,  2.5795374 , 32.15836934]), 'GPR/kern/kernels/0/variance': array(2861702.19314949), 'GPR/kern/kernels/1/variance': array(1.e-06)}
+#### N=1000:  
+{'GPR/kern/kernels/0/variance': array(1.00130248e-06), 'GPR/kern/kernels/0/lengthscales': array(1.00289829), 'GPR/kern/kernels/1/variance': array(0.99961203)}
+#### N=1000:  
+{'GPR/kern/kernels/1/variance': array(1.09362548e-05), 'GPR/kern/kernels/0/lengthscales': array(1.), 'GPR/kern/kernels/0/variance': array(1.e-06)}
+#### N=1000:  
+{'GPR/kern/kernels/0/variance': array(1.0013029e-06), 'GPR/kern/kernels/1/variance': array(0.99999992), 'GPR/kern/kernels/0/lengthscales': array(1.00336996)}
+#### N=1000:  
+{'GPR/kern/kernels/0/variance': array(1.e-06), 'GPR/kern/kernels/0/lengthscales': array(1.), 'GPR/kern/kernels/1/variance': array(0.05283709)}
+#### N=1000:  
+{'GPR/kern/kernels/0/variance': array(1.00130293e-06), 'GPR/kern/kernels/1/variance': array(0.99961147), 'GPR/kern/kernels/0/lengthscales': array(0.97865045)}
+#### N=1000:  
+{'GPR/kern/kernels/1/variance': array(0.55647417), 'GPR/kern/kernels/0/lengthscales': array(4.82603551), 'GPR/kern/kernels/0/variance': array(1.04905011)}

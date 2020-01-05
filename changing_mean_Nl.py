@@ -133,7 +133,7 @@ def fix_varr(l):
         varr = (m2[0] / d2[0])
         #print("varr= ", varr, " for i= ", i)
         print("in var i=",i, " the varr=",varr)
-        if i == 100:
+        if i == 20:
             break;
         a = a*varr ** (1.0 / 2.0)
         i = i + 1
@@ -155,7 +155,7 @@ def fix_varr(l):
 def zhi(v,l,i):
     return Z(v,l,0.0)*v**i
 
-def sample_new(dimY):
+def sample_new(dimY,val):
     #print("\n \n Sample_new()  \n\n")
     Mo = []
     La = []
@@ -163,14 +163,27 @@ def sample_new(dimY):
     #la_min = np.array([-1e1, -1e1, -1e1, val])
 
     if dimY==4:
-        la_max = np.array([ 1.0,    1e0,   1e0, 1e1])
-        la_min = np.array([ -1.0,  -1e0,  -1e0, -1e-1])
+        la_max = np.array([ 1e1,    1e1,   1e1, 1e1])
+        la_min = np.array([ -1e1,  -1e1,  -1e1, -1e1])
+        la_max = np.ones(dimY) * val
+        la_min = -np.ones(dimY) * val
     elif dimY==6:
-        la_max = np.array([ 1e1,   1e1,   1e1,  1e1, 1e1, 1e-4])
-        la_min = np.array([-1e1,  -1e1,  -1e1, -1e1,-1e1, 1e-4])
+        la_max = np.array([ 1e1,    1e1,   1e1, 1e1, 1e1,  1e1])
+        la_min = np.array([-1e1,  -1e1,   -1e1, -1e1,-1e1, -1e1])
+        la_max = np.ones(dimY) * val
+        la_min = -np.ones(dimY) * val
     elif dimY==8:
-        la_max = np.array([ 1e1,   1e1,   1e1,  1e1, 1e-2,  1e-2, 1e-3, 1e-7])
-        la_min = np.array([-1e1,  -1e1,  -1e1, -1e1,-1e-2, -1e-2, 1e-3, 1e-7])
+        #la_max = np.array([ 1e1,    1e1,   1e1, 1e1, 1e1,  1e1, 1e1,  1e1])
+        #la_min = np.array([-1e1,   -1e1,  -1e1, -1e1,-1e1, -1e1,-1e1, -1e1])
+        la_max =  np.ones(dimY)*val
+        la_min = -np.ones(dimY) * val
+        #la_max = np.array([ 1e-1,    1e-1,   1e-1, 1e-1, 1e-1,  1e-1, 1e-1,  1e-1])
+        #la_min = np.array([-1e-1,   -1e-1,  -1e-1, -1e-1,-1e-1, -1e-1,-1e-1, -1e-1])
+
+        #la_max = np.array([ 1e2,  1e2,  1e2,  1e2,  1e2,  1e1,  1e1,  1e1])
+        #la_min = np.array([-1e2, -1e2, -1e2, -1e2, -1e2, -1e1, -1e1, -1e1])
+        #la_max = np.array([5e-1, 5e-1, 5e-1, 5e-1, 1e-1, 1e-1, 1e-1, 1e-4])
+        #la_min = np.array([-5e-1, -5e-1, -5e-1, -5e-1, -1e-1, -1e-1, -1e-1, 1e-4])
     done = 0
     while done==0:
         while done == 0:
@@ -192,7 +205,7 @@ def sample_new(dimY):
             m = integrate.quad(zh1, -1e1, 1e1, args=(l, 0.0));
             mm = m[0] / d[0]
             print("mm= ",mm," and abs(var - 1.0) =",abs(varr-1.0))
-            if i==1000:
+            if i==100:
                 break;
                 done = 0;
             i = i+1;
